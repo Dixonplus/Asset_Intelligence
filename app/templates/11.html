@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% block page_title %}Service Request Audit{% endblock %}{% block content %}<div class="panel">
+    <div class="panel-head">
+        <div>
+            <h3>Complete audit trail</h3>
+            <p>Creation, assignment, repair activity, approvals, completion and closeout.</p>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Request</th>
+                    <th>Action</th>
+                    <th>Actor</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>{% for a in audits %}<tr>
+                    <td>{{a.created_at.strftime('%Y-%m-%d %H:%M')}}</td>
+                    <td>{{a.service_request.request_id if a.service_request else a.service_request_id}}</td>
+                    <td>{{a.action}}</td>
+                    <td>{{a.actor}}</td>
+                    <td>{{a.notes}}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="5" class="empty">No audit events.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}

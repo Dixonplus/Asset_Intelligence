@@ -1,0 +1,44 @@
+{% extends 'base.html' %}{% block page_title %}Vendors & Item Intelligence{% endblock %}{% block content %}<div
+    class="grid g2">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Vendors / suppliers</h3>
+                <p>Approved external service and parts partners.</p>
+            </div>
+        </div>
+        <form method="post" class="form-grid">
+            <div class="field"><label>Name</label><input name="name" required></div>
+            <div class="field"><label>Type</label><input name="vendor_type"></div>
+            <div class="field"><label>Contact</label><input name="contact_name"></div>
+            <div class="field"><label>Email</label><input name="email" type="email"></div>
+            <div class="field"><label>Phone</label><input name="phone"></div>
+            <div class="field"><label>Status</label><select name="status">
+                    <option>Approved</option>
+                    <option>Pending</option>
+                    <option>Suspended</option>
+                </select></div>
+            <div class="full"><button class="btn btn-primary">Save vendor</button></div>
+        </form>
+    </div>
+    <div class="panel">
+        <h3>Vendor register</h3>
+        <div class="table-wrap">
+            <table class="table">
+                <tr>
+                    <th>Vendor</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Rating</th>
+                </tr>{% for v in vendors %}<tr>
+                    <td>{{v.name}}</td>
+                    <td>{{v.vendor_type}}</td>
+                    <td>{{v.status}}</td>
+                    <td>{{v.rating}}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="4" class="empty">No vendors.</td>
+                </tr>{% endfor %}
+            </table>
+        </div>
+    </div>
+</div>{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}{% block page_title %}Notifications & Predictive Alerts{% endblock %}{% block content %}<div
+    class="hero">
+    <h2>Stakeholders stay informed.</h2>
+    <p>Email, WhatsApp, SMS-ready notification records and predictive alerts keep requesters, technicians and managers
+        aligned without constant login.</p>
+</div>
+<div class="panel">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Channel</th>
+                    <th>Recipient</th>
+                    <th>Subject</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>{% for n in notifications %}<tr>
+                    <td>{{n.channel}}</td>
+                    <td>{{n.recipient}}</td>
+                    <td>{{n.subject}}</td>
+                    <td>{{n.message}}</td>
+                    <td><span class="badge green">{{n.status}}</span></td>
+                    <td>{{n.created_at.strftime('%Y-%m-%d %H:%M')}}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="6" class="empty">No notifications.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}

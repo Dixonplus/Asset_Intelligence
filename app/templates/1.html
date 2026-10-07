@@ -1,0 +1,96 @@
+{% extends 'base.html' %}{% block page_title %}Digital Asset Register{% endblock %}{% block content %}<div
+    class="panel">
+    <div class="panel-head">
+        <div>
+            <h3>Unified asset register</h3>
+            <p>Search, filter, review, export and manage lifecycle records.</p>
+        </div>
+        <div class="actions"><a class="btn btn-light" href="{{ url_for('export_assets') }}">Export CSV</a><a
+                class="btn btn-primary" href="#add">Add asset</a></div>
+    </div>
+    <form class="toolbar"><input class="search field" name="q" value="{{ request.args.get('q','') }}"
+            placeholder="Search asset tag, name, manufacturer"><select name="status">
+            <option value="">All statuses</option>{% for x in ['Operational','Maintenance Due','Down','Retired'] %}
+            <option {% if request.args.get('status')==x %}selected{% endif %}>{{x}}</option>{% endfor %}
+        </select><select name="category">
+            <option value="">All categories</option>{% for x in ['Refrigeration','Fleet','Material Handling','Power'] %}
+            <option {% if request.args.get('category')==x %}selected{% endif %}>{{x}}</option>{% endfor %}
+        </select><select name="criticality">
+            <option value="">All criticality</option>
+            <option>Critical</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+        </select><button class="btn btn-light">Filter</button></form>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Region / Site</th>
+                    <th>Supplier</th>
+                    <th>Criticality</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>{% for a in assets %}<tr>
+                    <td><b>{{a.asset_tag}}</b><small>{{a.name}}</small></td>
+                    <td>{{a.category}}</td>
+                    <td>{{a.status}}</td>
+                    <td>{{a.region}} / {{a.site}}</td>
+                    <td>{{a.supplier}}</td>
+                    <td>{{a.criticality}}</td>
+                    <td>{{a.current_value}}</td>
+                    <td>
+                        <div class="table-actions"><a class="btn btn-light"
+                                href="{{url_for('asset_detail',asset_id=a.id)}}">View</a><a class="btn btn-light"
+                                href="{{url_for('edit_asset',asset_id=a.id)}}">Edit</a><a class="btn btn-light"
+                                href="{{url_for('asset_qr',asset_id=a.id)}}" target="_blank">QR</a></div>
+                    </td>
+                </tr>{% else %}<tr>
+                    <td colspan="8" class="empty">No assets found.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>
+<div id="add" class="panel" style="margin-top:16px">
+    <div class="panel-head">
+        <div>
+            <h3>Register asset</h3>
+            <p>Creates a live record in MySQL.</p>
+        </div>
+    </div>
+    <form method="post" class="form-grid">
+        <div class="field"><label>Asset tag</label><input name="asset_tag" required></div>
+        <div class="field"><label>Name</label><input name="name" required></div>
+        <div class="field"><label>Category</label><input name="category"></div>
+        <div class="field"><label>Status</label><select name="status">
+                <option>Operational</option>
+                <option>Maintenance Due</option>
+                <option>Down</option>
+                <option>Retired</option>
+            </select></div>
+        <div class="field"><label>Region</label><input name="region"></div>
+        <div class="field"><label>Site</label><input name="site"></div>
+        <div class="field"><label>Supplier</label><input name="supplier"></div>
+        <div class="field"><label>Manufacturer</label><input name="manufacturer"></div>
+        <div class="field"><label>Model</label><input name="model"></div>
+        <div class="field"><label>Criticality</label><select name="criticality">
+                <option>Critical</option>
+                <option>High</option>
+                <option selected>Medium</option>
+                <option>Low</option>
+            </select></div>
+        <div class="field"><label>Purchase cost</label><input type="number" step="0.01" name="purchase_cost"></div>
+        <div class="field"><label>Current value</label><input type="number" step="0.01" name="current_value"></div>
+        <div class="field"><label>Expected life (years)</label><input type="number" name="expected_life_years"
+                value="10"></div>
+        <div class="field"><label>Mileage / usage</label><input type="number" name="mileage"></div>
+        <div class="field"><label>Latitude</label><input type="number" step="any" name="latitude"></div>
+        <div class="field"><label>Longitude</label><input type="number" step="any" name="longitude"></div>
+        <div class="full actions"><button class="btn btn-primary">Save asset</button></div>
+    </form>
+</div>{% endblock %}

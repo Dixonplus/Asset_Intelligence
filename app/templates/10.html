@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% block page_title %}Edit Asset{% endblock %}{% block content %}<div class="panel">
+    <div class="panel-head">
+        <div>
+            <h3>Edit {{asset.asset_tag}}</h3>
+            <p>Update the live MySQL asset record.</p>
+        </div><a class="btn btn-light" href="{{url_for('asset_detail',asset_id=asset.id)}}">Cancel</a>
+    </div>
+    <form method="post" class="form-grid">{% for label,field in
+        [('Name','name'),('Category','category'),('Status','status'),('Region','region'),('Site','site'),('Supplier','supplier'),('Manufacturer','manufacturer'),('Model','model'),('Criticality','criticality'),('Purchase
+        Cost','purchase_cost'),('Current Value','current_value'),('Expected
+        Life','expected_life_years'),('Mileage','mileage')] %}<div class="field"><label>{{label}}</label><input
+                name="{{field}}" value="{{getattr(asset,field)}}"></div>{% endfor %}<div class="full actions"><button
+                class="btn btn-primary">Save changes</button></div>
+    </form>
+</div>{% endblock %}

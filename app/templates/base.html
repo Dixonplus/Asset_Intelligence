@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}AB Afric Infrastructure Asset Intelligence{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/app.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/ab-afric-favicon.png') }}">
+</head>
+
+<body>{% if current_user.is_authenticated %}<aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <!-- <div class="brand-mark">AB</div> -->
+            <img src="{{ url_for('static', filename='images/ab-afric-logo.png') }}" alt="AB AFRIC" class="brand-mark">
+            <div><strong>AB AFRIC</strong><small>Asset Intelligence</small></div>
+        </div>
+        <nav class="nav"><a class="{{ 'active' if request.endpoint=='dashboard' else '' }}"
+                href="{{ url_for('dashboard') }}"><i class="fa-solid fa-gauge"></i>Dashboard</a>
+            <div class="nav-label">ASSET INTELLIGENCE</div><a href="{{ url_for('asset_register') }}"><i
+                    class="fa-solid fa-boxes-stacked"></i>Digital Asset Register</a><a
+                href="{{ url_for('asset_locations') }}"><i class="fa-solid fa-location-dot"></i>GIS & Locations</a><a
+                href="{{ url_for('vendors') }}"><i class="fa-solid fa-building"></i>Vendors</a>
+            <div class="nav-label">MAINTENANCE & SERVICES</div><a href="{{ url_for('create_service_request') }}"><i
+                    class="fa-solid fa-circle-plus"></i>New Service Request</a><a
+                href="{{ url_for('service_requests') }}"><i class="fa-solid fa-list-check"></i>Service Requests</a><a
+                href="{{ url_for('parts') }}"><i class="fa-solid fa-screwdriver-wrench"></i>Parts & Service
+                Workflow</a><a href="{{ url_for('consumables') }}"><i class="fa-solid fa-flask"></i>Consumables</a><a
+                href="{{ url_for('preventive') }}"><i class="fa-solid fa-calendar-check"></i>Preventive
+                Maintenance</a><a href="{{ url_for('service_audit') }}"><i
+                    class="fa-solid fa-clock-rotate-left"></i>Service Audit</a><a href="{{ url_for('alerts') }}"><i
+                    class="fa-solid fa-bell"></i>Notifications & Alerts</a>
+            <div class="nav-label">INTELLIGENCE</div><a href="{{ url_for('maintenance_intelligence') }}"><i
+                    class="fa-solid fa-chart-line"></i>Maintenance Intelligence</a><a
+                href="{{ url_for('failure_forecast') }}"><i class="fa-solid fa-brain"></i>Strategic Intelligence</a><a
+                href="{{ url_for('capital_allocation') }}"><i class="fa-solid fa-coins"></i>CAPEX Decisions</a>
+        </nav>
+        <div class="sidebar-foot"><a href="{{ url_for('logout') }}"><i class="fa-solid fa-right-from-bracket"></i>Log
+                out</a></div>
+    </aside>
+    <main class="main">
+        <header class="topbar"><button class="icon-btn mobile" onclick="toggleSidebar()"><i
+                    class="fa-solid fa-bars"></i></button>
+            <div><span class="eyebrow">Infrastructure Asset Intelligence</span>
+                <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="top-actions"><a class="btn btn-light" href="{{ url_for('alerts') }}"><i
+                        class="fa-regular fa-bell"></i></a><span class="user-chip"><b>{{
+                        current_user.full_name[:1]|upper }}</b><span>{{ current_user.full_name }}</span></span></div>
+        </header>
+        <section class="content">{% with messages=get_flashed_messages(with_categories=true) %}{% if messages %}<div
+                class="flash-stack">{% for cat,msg in messages %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor
+                %}</div>{% endif %}{% endwith %}{% block content %}{% endblock %}</section>
+    </main>{% else %}{% block public_content %}{% endblock %}{% endif %}
+    <script src="{{ url_for('static',filename='js/app.js') }}"></script>
+</body>
+
+</html>

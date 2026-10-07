@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% block page_title %}Detailed Asset Register{% endblock %}{% block content %}<div
+    class="panel">
+    <div class="panel-head">
+        <div>
+            <h3>Asset lifecycle data</h3>
+            <p>Use the Digital Asset Register to open the live record and its edit workflow.</p>
+        </div><a class="btn btn-primary" href="{{url_for('asset_register')}}">Open register</a>
+    </div>
+    <div class="grid g3">
+        <div class="card">
+            <h3>Identity</h3>
+            <p class="muted">Tag, name, category, manufacturer and model.</p>
+        </div>
+        <div class="card">
+            <h3>Commercial</h3>
+            <p class="muted">Purchase cost, current value and maintenance budget.</p>
+        </div>
+        <div class="card">
+            <h3>Lifecycle</h3>
+            <p class="muted">Commissioning, expected life, usage and status.</p>
+        </div>
+    </div>
+</div>{% endblock %}

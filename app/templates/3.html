@@ -1,0 +1,27 @@
+{% extends 'base.html' %}{% block page_title %}GIS & Asset Locations{% endblock %}{% block content %}<div
+    class="grid g2">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Enterprise locations</h3>
+                <p>GIS-enabled locations linked to asset records.</p>
+            </div>
+        </div>{% for l in locations %}<div class="kpi">
+            <div><b>{{l.name}}</b>
+                <div class="muted">{{l.region}} · {{l.site}}</div>
+            </div><span class="badge blue">{{l.assets|length}} assets</span>
+        </div>{% else %}<div class="empty">No locations configured.</div>{% endfor %}
+    </div>
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Asset movement context</h3>
+                <p>Map-ready coordinates from the asset register.</p>
+            </div>
+        </div>
+        <div class="map">{% for a in assets if a.latitude is not none and a.longitude is not none %}<div class="pin"
+                data-left="{{ (a.longitude + 180) / 360 * 100 }}"
+                data-top="{{ (90 - a.latitude) / 180 * 100 }}" title="{{a.asset_tag}}">•
+            </div>{% endfor %}</div>
+    </div>
+</div>{% endblock %}

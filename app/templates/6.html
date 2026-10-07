@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% block page_title %}Asset Intelligence{% endblock %}{% block content %}<div class="hero">
+    <span class="eyebrow" style="color:#98a2b3">{{asset.asset_tag}}</span>
+    <h2>{{asset.name}}</h2>
+    <p>Condition, criticality, economic impact, reliability, service history and GIS context in one view.</p>
+</div>
+<div class="grid g4">
+    <div class="metric"><span class="label">Status</span><strong style="font-size:22px">{{asset.status}}</strong></div>
+    <div class="metric"><span class="label">Criticality</span><strong
+            style="font-size:22px">{{asset.criticality}}</strong></div>
+    <div class="metric"><span class="label">Current Value</span><strong
+            style="font-size:22px">{{asset.current_value}}</strong></div>
+    <div class="metric"><span class="label">Expected Life</span><strong
+            style="font-size:22px">{{asset.expected_life_years}} yrs</strong></div>
+</div>
+<div class="grid g3" style="margin-top:16px">
+    <div class="card">
+        <h3>Operational context</h3>
+        <p>Category: {{asset.category}}</p>
+        <p>Region: {{asset.region}}</p>
+        <p>Site: {{asset.site}}</p>
+        <p>Usage: {{asset.mileage}}</p>
+    </div>
+    <div class="card">
+        <h3>Commercial context</h3>
+        <p>Purchase cost: {{asset.purchase_cost}}</p>
+        <p>Current value: {{asset.current_value}}</p>
+        <p>Supplier: {{asset.supplier}}</p>
+        <p>Manufacturer: {{asset.manufacturer}}</p>
+    </div>
+    <div class="card">
+        <h3>Decision links</h3>
+        <div class="actions"><a class="btn btn-light" href="{{url_for('asset_history',asset_id=asset.id)}}">Service
+                history</a><a class="btn btn-light" href="{{url_for('asset_technical',asset_id=asset.id)}}">Technical
+                detail</a><a class="btn btn-primary" href="{{url_for('edit_asset',asset_id=asset.id)}}">Edit asset</a>
+        </div>
+    </div>
+</div>{% endblock %}

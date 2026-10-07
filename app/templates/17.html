@@ -1,0 +1,90 @@
+{% extends 'base.html' %}{% block page_title %}Strategic Intelligence & CAPEX Decisions{% endblock %}{% block content %}
+<div class="hero"><span class="eyebrow" style="color:#98a2b3">Strategic Intelligence — in development</span>
+    <h2>Turn maintenance data into capital decisions.</h2>
+    <p>Combine asset history, service reports, consumables, failure patterns, costs and PM schedules to guide repair,
+        replace, retain or retire decisions.</p>
+</div>
+<div class="grid g2">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Failure predictions</h3>
+                <p>Historical signals and model outputs.</p>
+            </div>
+        </div>
+        <div class="table-wrap">
+            <table class="table">
+                <tr>
+                    <th>Asset</th>
+                    <th>Failure mode</th>
+                    <th>Probability</th>
+                    <th>Action</th>
+                </tr>{% for p in predictions %}<tr>
+                    <td>{{p.asset.asset_tag}}</td>
+                    <td>{{p.failure_mode}}</td>
+                    <td><span class="badge red">{{'%.0f'|format(p.probability*100)}}%</span></td>
+                    <td>{{p.recommended_action}}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="4" class="empty">No predictions.</td>
+                </tr>{% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Capital allocation</h3>
+                <p>Recommended repair / replace / retain / retire choices.</p>
+            </div>
+        </div>
+        <form method="post" action="{{url_for('capital_allocation')}}" class="form-grid">
+            <div class="field"><label>Asset</label><select name="asset_id">{% for a in assets %}<option
+                        value="{{a.id}}">{{a.asset_tag}} — {{a.name}}</option>{% endfor %}</select></div>
+            <div class="field"><label>Decision</label><select name="decision">
+                    <option>Repair</option>
+                    <option>Replace</option>
+                    <option>Retain</option>
+                    <option>Retire</option>
+                </select></div>
+            <div class="field"><label>Recommended CAPEX</label><input type="number" step="0.01"
+                    name="recommended_capex"></div>
+            <div class="field"><label>Life extension (years)</label><input type="number" step="0.1"
+                    name="life_extension"></div>
+            <div class="field"><label>Annual saving</label><input type="number" step="0.01" name="saving"></div>
+            <div class="field"><label>Decision score</label><input type="number" step="0.1" name="score"></div>
+            <div class="field full"><label>Rationale</label><textarea name="rationale"></textarea></div>
+            <div class="full"><button class="btn btn-purple">Save CAPEX decision</button></div>
+        </form>
+    </div>
+</div>
+<div class="panel" style="margin-top:16px">
+    <div class="panel-head">
+        <div>
+            <h3>Decision register</h3>
+            <p>Evidence-based capital allocation history.</p>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <tr>
+                <th>Asset</th>
+                <th>Decision</th>
+                <th>CAPEX</th>
+                <th>Life extension</th>
+                <th>Score</th>
+                <th>Status</th>
+                <th>Rationale</th>
+            </tr>{% for d in decisions %}<tr>
+                <td>{{d.asset.asset_tag}}</td>
+                <td><span class="badge purple">{{d.decision}}</span></td>
+                <td>{{d.recommended_capex}}</td>
+                <td>{{d.expected_life_extension_years}}</td>
+                <td>{{d.decision_score}}</td>
+                <td>{{d.status}}</td>
+                <td>{{d.rationale}}</td>
+            </tr>{% else %}<tr>
+                <td colspan="7" class="empty">No decisions recorded.</td>
+            </tr>{% endfor %}
+        </table>
+    </div>
+</div>{% endblock %}

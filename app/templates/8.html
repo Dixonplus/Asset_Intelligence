@@ -1,0 +1,42 @@
+{% extends 'base.html' %}{% block page_title %}Maintenance Intelligence{% endblock %}{% block content %}<div
+    class="grid g4">
+    <div class="metric"><span class="label">Intelligence records</span><strong>{{records|length}}</strong></div>
+    <div class="metric"><span class="label">High-risk
+            predictions</span><strong>{{predictions|selectattr('probability','ge',0.7)|list|length}}</strong></div>
+    <div class="metric"><span class="label">Avg. risk</span><strong>{% if records %}{{
+            '%.0f'|format((records|sum(attribute='risk_score'))/records|length) }}{% else %}0{% endif %}</strong></div>
+    <div class="metric"><span class="label">Decision focus</span><strong style="font-size:20px">Repair /
+            Replace</strong></div>
+</div>
+<div class="panel" style="margin-top:16px">
+    <div class="panel-head">
+        <div>
+            <h3>Asset maintenance intelligence</h3>
+            <p>Forecast cost, reliability, risk and recommended maintenance strategy.</p>
+        </div>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>Health</th>
+                    <th>Reliability</th>
+                    <th>Risk</th>
+                    <th>Forecast</th>
+                    <th>Recommendation</th>
+                </tr>
+            </thead>
+            <tbody>{% for r in records %}<tr>
+                    <td>{{r.asset.asset_tag}}</td>
+                    <td>{{r.health_score}}</td>
+                    <td>{{r.reliability_score}}</td>
+                    <td><span class="badge red">{{r.risk_score}}</span></td>
+                    <td>{{r.annual_maintenance_forecast}}</td>
+                    <td>{{r.recommendation}}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="6" class="empty">No intelligence records.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}

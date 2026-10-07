@@ -1,0 +1,57 @@
+{% extends 'base.html' %}{% block page_title %}Asset Service History{% endblock %}{% block content %}<div class="panel">
+    <div class="panel-head">
+        <div>
+            <h3>{{asset.asset_tag}} service history</h3>
+            <p>Response times, request IDs, priorities, teams, personnel, outcomes and costs.</p>
+        </div><a class="btn btn-primary" href="{{url_for('create_service_request')}}">Create service request</a>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Service</th>
+                    <th>Request</th>
+                    <th>Response</th>
+                    <th>Repair</th>
+                    <th>Outcome</th>
+                    <th>Cost</th>
+                    <th>Personnel</th>
+                </tr>
+            </thead>
+            <tbody>{% for h in service_history %}<tr>
+                    <td>{{h.service_date}}</td>
+                    <td>{{h.service_type}}</td>
+                    <td>{{h.service_request_id or '—'}}</td>
+                    <td>{{h.response_minutes or '—'}} min</td>
+                    <td>{{h.repair_minutes or '—'}} min</td>
+                    <td>{{h.outcome}}</td>
+                    <td>{{h.cost}}</td>
+                    <td>{{h.performed_by}}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="8" class="empty">No structured service history yet. Service requests and reports can
+                        populate this layer.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>
+<div class="panel" style="margin-top:16px">
+    <h3>Service requests linked to asset</h3>
+    <div class="table-wrap">
+        <table class="table">
+            <tr>
+                <th>Request</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Team</th>
+            </tr>{% for r in requests %}<tr>
+                <td>{{r.request_id}}</td>
+                <td>{{r.priority}}</td>
+                <td>{{r.status}}</td>
+                <td>{{r.team}}</td>
+            </tr>{% else %}<tr>
+                <td colspan="4" class="empty">No requests.</td>
+            </tr>{% endfor %}
+        </table>
+    </div>
+</div>{% endblock %}

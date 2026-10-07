@@ -1,0 +1,31 @@
+{% extends 'base.html' %}{% block page_title %}Service Request Intake{% endblock %}{% block content %}<div class="hero">
+    <h2>Omnichannel maintenance request</h2>
+    <p>Public issue reporting and high-granularity internal requests funnel into one operational pipeline—no calls or
+        SMS required.</p>
+</div>
+<div class="panel">
+    <form method="post" class="form-grid">
+        <div class="field"><label>Asset</label><select name="asset_id">
+                <option value="">Not linked yet</option>{% for a in assets %}<option value="{{a.id}}">{{a.asset_tag}} —
+                    {{a.name}}</option>{% endfor %}
+            </select></div>
+        <div class="field"><label>Priority</label><select name="priority">
+                <option>Critical</option>
+                <option>High</option>
+                <option selected>Medium</option>
+                <option>Low</option>
+            </select></div>
+        <div class="field"><label>Title</label><input name="title" required></div>
+        <div class="field"><label>Team</label><input name="team" placeholder="Refrigeration, Fleet, Electrical...">
+        </div>
+        <div class="field"><label>Source</label><select name="source">
+                <option>Portal</option>
+                <option>Mobile</option>
+                <option>IoT Alert</option>
+                <option>Inspection</option>
+            </select></div>
+        <div class="field full"><label>Description</label><textarea name="description" required></textarea></div>
+        <div class="full actions"><button class="btn btn-primary">Submit request</button><a class="btn btn-light"
+                href="{{url_for('service_requests')}}">View service queue</a></div>
+    </form>
+</div>{% endblock %}

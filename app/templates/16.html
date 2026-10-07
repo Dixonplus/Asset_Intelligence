@@ -1,0 +1,83 @@
+{% extends 'base.html' %}{% block page_title %}Preventive Maintenance & Insightful Reporting{% endblock %}{% block
+content %}<div class="grid g4">
+    <div class="metric"><span class="label">Schedules</span><strong>{{schedules|length}}</strong></div>
+    <div class="metric"><span
+            class="label">Overdue</span><strong>{{schedules|selectattr('status','equalto','Overdue')|list|length}}</strong>
+    </div>
+    <div class="metric"><span class="label">Executions</span><strong>{{executions|length}}</strong></div>
+    <div class="metric"><span class="label">Planning focus</span><strong style="font-size:20px">Demand & Risk</strong>
+    </div>
+</div>
+<div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Create PM schedule</h3>
+                <p>Turn schedules into strategic operational data.</p>
+            </div>
+        </div>
+        <form method="post" class="form-grid">
+            <div class="field"><label>Asset</label><select name="asset_id">{% for a in assets %}<option
+                        value="{{a.id}}">{{a.asset_tag}} — {{a.name}}</option>{% endfor %}</select></div>
+            <div class="field"><label>Task</label><input name="task" required></div>
+            <div class="field"><label>Frequency</label><input name="frequency"
+                    placeholder="Monthly, Quarterly, 10,000 km"></div>
+            <div class="field"><label>Priority</label><select name="priority">
+                    <option>Critical</option>
+                    <option>High</option>
+                    <option selected>Medium</option>
+                    <option>Low</option>
+                </select></div>
+            <div class="field"><label>Due date</label><input type="date" name="due_date"></div>
+            <div class="full"><button class="btn btn-primary">Create schedule</button></div>
+        </form>
+    </div>
+    <div class="panel">
+        <h3>PM schedule</h3>
+        <div class="table-wrap">
+            <table class="table">
+                <tr>
+                    <th>Asset</th>
+                    <th>Task</th>
+                    <th>Due</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>{% for s in schedules %}<tr>
+                    <td>{{s.asset.asset_tag}}</td>
+                    <td>{{s.task}}</td>
+                    <td>{{s.due_date}}</td>
+                    <td>{{s.status}}</td>
+                    <td>{% if s.status!='Completed' %}<form method="post"
+                            action="{{url_for('complete_pm',schedule_id=s.id)}}"><button
+                                class="btn btn-light">Complete</button></form>{% endif %}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="5" class="empty">No PM schedules.</td>
+                </tr>{% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<div class="panel" style="margin-top:16px">
+    <h3>PM execution history</h3>
+    <div class="table-wrap">
+        <table class="table">
+            <tr>
+                <th>Date</th>
+                <th>Asset</th>
+                <th>Technician</th>
+                <th>Hours</th>
+                <th>Cost</th>
+                <th>Findings</th>
+            </tr>{% for e in executions %}<tr>
+                <td>{{e.execution_date}}</td>
+                <td>{{e.asset_id}}</td>
+                <td>{{e.executed_by}}</td>
+                <td>{{e.labor_hours}}</td>
+                <td>{{e.cost}}</td>
+                <td>{{e.findings}}</td>
+            </tr>{% else %}<tr>
+                <td colspan="6" class="empty">No executions.</td>
+            </tr>{% endfor %}
+        </table>
+    </div>
+</div>{% endblock %}

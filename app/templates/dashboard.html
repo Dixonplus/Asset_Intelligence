@@ -1,0 +1,92 @@
+{% extends 'base.html' %}{% block page_title %}Enterprise Dashboard{% endblock %}{% block content %}<div class="hero">
+    <span class="eyebrow" style="color:#98a2b3">AB AFRIC</span>
+    <h2>From asset records to asset investment intelligence.</h2>
+    <p>One operational view across assets, maintenance, service history, cost, risk and capital decisions.</p>
+</div>
+<div class="grid g4">
+    <div class="metric"><span class="label">Registered Assets</span><strong>{{ asset_count }}</strong><small>Across
+            enterprise locations</small></div>
+    <div class="metric"><span class="label">Service Requests</span><strong>{{ request_count }}</strong><small>{{
+            open_request_count }} open</small></div>
+    <div class="metric"><span class="label">Vendors</span><strong>{{ vendor_count }}</strong><small>Suppliers & service
+            partners</small></div>
+    <div class="metric"><span class="label">Intelligence</span><strong>{{ predictions|length }}</strong><small>Failure
+            signals currently loaded</small></div>
+</div>
+<div class="grid g2" style="margin-top:16px">
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Asset portfolio</h3>
+                <p>Latest registered equipment and current condition.</p>
+            </div><a class="btn btn-light" href="{{ url_for('asset_register') }}">View register</a>
+        </div>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Criticality</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>{% for a in assets %}<tr>
+                        <td><b>{{ a.asset_tag }}</b><small>{{ a.name }}</small></td>
+                        <td>{{ a.category }}</td>
+                        <td><span class="badge blue">{{ a.status }}</span></td>
+                        <td>{{ a.criticality }}</td>
+                        <td><a class="table-actions" href="{{ url_for('asset_detail',asset_id=a.id) }}">View</a></td>
+                    </tr>{% else %}<tr>
+                        <td colspan="5" class="empty">No assets yet.</td>
+                    </tr>{% endfor %}</tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel">
+        <div class="panel-head">
+            <div>
+                <h3>Failure signals</h3>
+                <p>Highest-risk predictions.</p>
+            </div><a href="{{ url_for('failure_forecast') }}">Strategic view</a>
+        </div>
+        <div class="kpi-list">{% for p in predictions %}<div class="kpi">
+                <div><b>{{ p.asset.asset_tag }}</b>
+                    <div class="muted">{{ p.failure_mode }}</div>
+                </div><span class="badge red">{{ '%.0f'|format(p.probability*100) }}%</span>
+            </div>{% else %}<div class="empty">No predictions loaded.</div>{% endfor %}</div>
+    </div>
+</div>
+<div class="panel" style="margin-top:16px">
+    <div class="panel-head">
+        <div>
+            <h3>Recent service requests</h3>
+            <p>Submission through closeout.</p>
+        </div><a class="btn btn-primary" href="{{ url_for('create_service_request') }}">New request</a>
+    </div>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Request</th>
+                    <th>Asset</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Team</th>
+                </tr>
+            </thead>
+            <tbody>{% for r in requests %}<tr>
+                    <td>{{ r.request_id }}</td>
+                    <td>{{ r.asset.asset_tag if r.asset else 'Unassigned' }}</td>
+                    <td>{{ r.priority }}</td>
+                    <td><span
+                            class="badge {% if r.status in ['Completed','Closed'] %}green{% elif r.priority=='Critical' %}red{% else %}blue{% endif %}">{{
+                            r.status }}</span></td>
+                    <td>{{ r.team or '—' }}</td>
+                </tr>{% else %}<tr>
+                    <td colspan="5" class="empty">No service requests.</td>
+                </tr>{% endfor %}</tbody>
+        </table>
+    </div>
+</div>{% endblock %}

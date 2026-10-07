@@ -1,0 +1,1 @@
+Place project-specific asset thumbnails here. The application uses database records and does not depend on missing hard-coded image filenames.

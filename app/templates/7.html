@@ -1,0 +1,29 @@
+{% extends 'base.html' %}{% block page_title %}Technical Asset Intelligence{% endblock %}{% block content %}<div
+    class="panel">
+    <div class="panel-head">
+        <div>
+            <h3>{{asset.asset_tag}} · Engineering detail</h3>
+            <p>Technical teams see equipment-specific condition data rather than only general records.</p>
+        </div><a class="btn btn-light" href="{{url_for('asset_detail',asset_id=asset.id)}}">Back to asset</a>
+    </div>{% if tech %}<div class="grid g3">
+        <div class="card">
+            <h3>Identity</h3>
+            <p>Type: {{tech.asset_type}}</p>
+            <p>Serial: {{tech.serial_number}}</p>
+            <p>Hours: {{tech.operating_hours}}</p>
+        </div>
+        <div class="card">
+            <h3>Condition</h3>
+            <p>Structure: {{tech.structure_condition}}</p>
+            <p>Safety: {{tech.safety_status}}</p>
+            <p>Refrigeration: {{tech.refrigeration_condition}}</p>
+            <p>Compressor: {{tech.compressor_condition}}</p>
+        </div>
+        <div class="card">
+            <h3>Refrigerant</h3>
+            <p>Type: {{tech.refrigerant_type}}</p>
+            <p>Charge: {{tech.refrigerant_charge}}</p>
+            <p>Temperature: {{tech.temperature_range}}</p>
+        </div>
+    </div>{% else %}<div class="empty">No technical record has been created for this asset yet.</div>{% endif %}
+</div>{% endblock %}
